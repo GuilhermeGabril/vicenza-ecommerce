@@ -1,0 +1,43 @@
+/* carrinho.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.home-btn {
+    color: white;
+    text-decoration: none;
+}
+
+.produtos-carrinho {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.produto-carrinho {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+footer button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+footer button:hover {
+    background-color: #218838;
+}

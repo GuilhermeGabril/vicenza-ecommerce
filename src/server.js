@@ -1,6 +1,6 @@
 const express = require('express');
 const session = require('express-session');
-const flash = require('connect-flash'); // Importa o connect-flash
+const flash = require('connect-flash');
 const routes = require('./routes');
 const path = require('path');
 
@@ -20,7 +20,7 @@ app.use(session({
 
 app.use(flash()); // Usando o middleware connect-flash
 
-// Usando as rotas de autenticação
+// Usando as rotas
 app.use(routes);
 
 app.listen(5500, () => {

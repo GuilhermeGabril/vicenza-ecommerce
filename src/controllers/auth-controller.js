@@ -7,7 +7,7 @@ class AuthController {
 
     login(req, res) {
         const { email, senha } = req.body;
-        const login = logins.find(l => l.email === email && l.senha === senha);
+        const login = logins.find(l => l.getEmail() === email && l.getSenha() === senha);
 
         if (login) {
             req.session.user = login;

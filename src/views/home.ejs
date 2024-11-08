@@ -1,13 +1,36 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home - Produtos</title>
+    <link rel="stylesheet" href="/home.css">
 </head>
 <body>
-    <h1>Bem-vindo ao E-commerce de Roupas</h1>
-    <p>Você está logado!</p>
-    <a href="/auth/logout">Sair</a>
+    <!-- Barra de navegação com o botão de logout -->
+    <header>
+        <nav>
+            <a href="/carrinho" class="cart-button">Carrinho</a>
+            <a href="/auth/logout" class="logout-button">Logout</a> <!-- Botão de Logout -->
+        </nav>
+    </header>
+
+    <!-- Seção de produtos -->
+    <main>
+        <h1>Produtos</h1>
+        <div class="produtos-container">
+            <% produtos.forEach(produto => { %>
+                <div class="produto-card">
+                    <h2><%= produto.nome %></h2>
+                    <p><%= produto.descricao %></p>
+                    <p>Preço: R$ <%= produto.preco %></p>
+                    <form action="/adicionar-carrinho" method="POST">
+                        <input type="hidden" name="idProduto" value="<%= produto.idProduto %>">
+                        <button type="submit" class="add-to-cart">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+    </main>
 </body>
 </html>

@@ -1,0 +1,32 @@
+<!-- src/views/carrinho.ejs -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho</title>
+    <link rel="stylesheet" href="/carrinho.css">
+</head>
+<body>
+    <header>
+        <a href="/home">Voltar para Home</a>
+    </header>
+    <main>
+        <h1>Carrinho de Compras</h1>
+        <% if (carrinho.length === 0) { %>
+            <p>Seu carrinho está vazio.</p>
+        <% } else { %>
+            <div class="produtos-carrinho">
+                <% carrinho.forEach(produto => { %>
+                    <div class="produto-carrinho">
+                        <h3><%= produto.nome %></h3>
+                        <p><%= produto.descricao %></p>
+                        <p>R$ <%= produto.valorVenda.toFixed(2) %></p>
+                        <!-- Aqui você pode adicionar campos para escolher o tamanho e a quantidade -->
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </main>
+</body>
+</html>
