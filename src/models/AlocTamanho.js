@@ -1,21 +1,28 @@
+
+const { produtos } = require('./Produto'); // Importando os produtos
+const { tamanhos } = require('./Tamanho'); // Importando os tamanhos
+const { cores } = require('./Cor'); // Importando as cores
+
 class AlocTamanho {
-    constructor(idAloc, quantidade, produto, tamanho) {
+    constructor(idAloc, quantidade, produto, tamanho, cor) {
         this.idAloc = idAloc;
         this.quantidade = quantidade;
         this.produto = produto; // Relacionamento com Produto
         this.tamanho = tamanho; // Relacionamento com Tamanho
+        this.cor = cor; // Relacionamento com Cor
     }
 }
 
-// Criação das alocações para cada produto em tamanhos P, M, G
+// Criação das alocações para cada produto em tamanhos e cores
 const alocacoes = [];
-const { produtos } = require('./Produto');  // Importando os produtos
-const { tamanhos } = require('./Tamanho');  // Importando os tamanhos
+let idCounter = 1;
 
-produtos.forEach((produto, index) => {
-    alocacoes.push(new AlocTamanho(index * 3 + 1, 10, produto, tamanhos[0])); // Tamanho P
-    alocacoes.push(new AlocTamanho(index * 3 + 2, 15, produto, tamanhos[1])); // Tamanho M
-    alocacoes.push(new AlocTamanho(index * 3 + 3, 12, produto, tamanhos[2])); // Tamanho G
+produtos.forEach(produto => {
+    tamanhos.forEach(tamanho => {
+        cores.forEach(cor => {
+            alocacoes.push(new AlocTamanho(idCounter++, 10, produto, tamanho, cor)); // Quantidade de exemplo: 10
+        });
+    });
 });
 
 module.exports = { AlocTamanho, alocacoes };

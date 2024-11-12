@@ -10,8 +10,12 @@
     <!-- Barra de navegação com o botão de logout -->
     <header>
         <nav>
-            <a href="/carrinho" class="cart-button">Carrinho</a>
-            <a href="/auth/logout" class="logout-button">Logout</a> <!-- Botão de Logout -->
+            <% if (user) { %>
+                <a href="/carrinho" class="cart-button">Carrinho</a> <!-- Somente aparece se o usuário estiver logado -->
+                <a href="/auth/logout" class="logout-button">Logout</a>
+            <% } else { %>
+                <a href="/auth/login" class="login-button">Login</a> <!-- Se não estiver logado -->
+            <% } %>
         </nav>
     </header>
 
@@ -23,7 +27,7 @@
                 <div class="produto-card">
                     <h2><%= produto.nome %></h2>
                     <p><%= produto.descricao %></p>
-                    <p>Preço: R$ <%= produto.preco %></p>
+                    <p>Preço: R$ <%= produto.valorVenda %></p>
                     <form action="/adicionar-carrinho" method="POST">
                         <input type="hidden" name="idProduto" value="<%= produto.idProduto %>">
                         <button type="submit" class="add-to-cart">Adicionar ao Carrinho</button>
