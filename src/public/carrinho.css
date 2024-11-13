@@ -1,43 +1,101 @@
 /* carrinho.css */
+
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px;
+h1 {
+    color: #2c3e50;
+    font-size: 2.5em;
+    margin: 20px 0;
     text-align: center;
 }
 
-.home-btn {
-    color: white;
-    text-decoration: none;
-}
-
-.produtos-carrinho {
+.carrinho {
+    width: 80%;
+    max-width: 900px;
+    background-color: #fff;
     padding: 20px;
-    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-.produto-carrinho {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
+.produto {
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
 }
 
-footer {
-    text-align: center;
-    margin-top: 20px;
+.produto:last-child {
+    border-bottom: none;
 }
 
-footer button {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
+.produto h2 {
+    font-size: 1.6em;
+    color: #34495e;
+}
+
+.produto p {
+    font-size: 1em;
+    color: #7f8c8d;
+    margin: 10px 0 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #34495e;
+}
+
+select, input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza o conteúdo dentro do formulário */
+    width: 100%;
+}
+
+button {
+    background-color: #27ae60;
+    color: #fff;
     border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
     cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 300px; /* Define uma largura máxima para o botão */
+    text-align: center;
 }
 
-footer button:hover {
-    background-color: #218838;
+button:hover {
+    background-color: #2ecc71;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin: 20px 0 10px;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.carrinho select {
+    width: 100%;
 }

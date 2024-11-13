@@ -11,6 +11,14 @@ class AlocTamanho {
         this.tamanho = tamanho; // Relacionamento com Tamanho
         this.cor = cor; // Relacionamento com Cor
     }
+    static getQuantidadeEstoque(idProduto, cor, tamanho) {
+        const alocacao = alocacoes.find(aloc =>
+            aloc.produto.idProduto === idProduto &&
+            aloc.cor === cor &&
+            aloc.tamanho === tamanho
+        );
+        return alocacao ? alocacao.quantidade : 0; // Retorna a quantidade ou 0 se não encontrar
+    }
 }
 
 // Criação das alocações para cada produto em tamanhos e cores

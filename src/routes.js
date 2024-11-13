@@ -23,4 +23,7 @@ router.get('/carrinho', vendaController.verCarrinho.bind(vendaController));
 // Rota para adicionar produtos ao carrinho
 router.post('/adicionar-carrinho', vendaController.adicionarAoCarrinho.bind(vendaController));
 
+// Rota para atualizar o carrinho com as seleções de cor, tamanho e quantidade
+router.post('/atualizar-carrinho', vendaController.atualizarCarrinho.bind(vendaController));
+
 module.exports = router;
