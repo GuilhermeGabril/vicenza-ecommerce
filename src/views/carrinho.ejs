@@ -19,79 +19,69 @@
                     
                     <!-- Seleção de Cor -->
                     <label for="cor">Cor:</label>
-                    <select name="cor">
-                        <% item.coresDisponiveis.forEach(cor => { %>
-                            <option value="<%= cor.nomeCor %>"><%= cor.nomeCor %></option>
-                        <% }); %>
+                    <select name="cor" onchange="this.form.submit()">
+                        <option value="">Selecione a cor</option> <!-- Opção vazia como padrão -->
+                        <% if (item.coresDisponiveis && item.coresDisponiveis.length > 0) { %>
+                            <% item.coresDisponiveis.forEach(cor => { %>
+                                <option value="<%= cor.nomeCor %>" <%= cor.nomeCor === item.corSelecionada ? 'selected' : '' %>>
+                                    <%= cor.nomeCor %>
+                                </option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">Nenhuma cor disponível</option>
+                        <% } %>
                     </select>
                     
                     <!-- Seleção de Tamanho -->
                     <label for="tamanho">Tamanho:</label>
-                    <select name="tamanho">
-                        <% item.tamanhosDisponiveis.forEach(tamanho => { %>
-                            <option value="<%= tamanho.tamanho %>"><%= tamanho.tamanho %></option>
-                        <% }); %>
+                    <select name="tamanho" onchange="this.form.submit()">
+                        <option value="">Selecione o tamanho</option> <!-- Opção vazia como padrão -->
+                        <% if (item.tamanhosDisponiveis && item.tamanhosDisponiveis.length > 0) { %>
+                            <% item.tamanhosDisponiveis.forEach(tamanho => { %>
+                                <option value="<%= tamanho.tamanho %>" <%= tamanho.tamanho === item.tamanhoSelecionado ? 'selected' : '' %>>
+                                    <%= tamanho.tamanho %>
+                                </option>
+                            <% }); %>
+                        <% } else { %>
+                            <option value="">Nenhum tamanho disponível</option>
+                        <% } %>
                     </select>
                     
                     <!-- Seleção de Quantidade -->
                     <label for="quantidade">Quantidade:</label>
-                    <input type="number" name="quantidade" min="1" value="<%= item.quantidadeSelecionada || 1 %>">
+                    <input type="number" name="quantidade" min="1" value="<%= item.quantidadeSelecionada || 1 %>" onchange="this.form.submit()">
                 </form>
+
+                <!-- Exibe o preço unitário do item -->
+                <p>Preço Unitário: R$ <%= item.preco.toFixed(2) %></p>
+
+                <!-- Exibe o subtotal do item (preço unitário * quantidade) -->
+                <p>Subtotal: R$ <%= (item.preco * item.quantidadeSelecionada).toFixed(2) %></p>
             </div>
         <% }); %>
     </div>
 
-    <!-- Seleção de Endereço -->
-    <h2>Endereço de Entrega</h2>
-    <form action="/confirmar-compra" method="post">
-        <label for="endereco">Escolha um endereço:</label>
-        <select name="endereco" required>
-            <% enderecos.forEach(endereco => { %>
-                <option value="<%= endereco.idEndereco %>">
-                    <%= endereco.rua %>, Nº <%= endereco.numero %>, Bairro: <%= endereco.bairro %> - CEP: <%= endereco.cep %>
-                </option>
-            <% }); %>
-        </select>
+    <!-- Exibe o valor total do carrinho -->
+    <h3>Valor Total: R$ <%= totalCompra %></h3>
 
-        <!-- Forma de Pagamento -->
-        <h2>Forma de Pagamento</h2>
-        <label for="pagamento">Escolha a forma de pagamento:</label>
-        <select name="pagamento" required>
-            <option value="pix">PIX</option>
-            <option value="cartao">Cartão de Crédito</option>
-        </select>
+    <!-- Botão para ir para a página de pagamento -->
+    <form action="/pagamento" method="get">
+        <button type="submit">Ir para formas de pagamento</button>
+    </form>
 
-        <!-- Exibe o código PIX ou opções de parcelamento -->
-        <div id="pix-container" style="display: none;">
-            <p><strong>Código PIX:</strong> <%= codigoPix %></p>
-        </div>
+    <!-- Botão para voltar para a home -->
+    <form action="/" method="get">
+        <button type="submit">Voltar para a Home</button>
+    </form>
 
-        <div id="cartao-container" style="display: none;">
-            <p><strong>Parcelas:</strong></p>
-            <% parcelasCartao.forEach(parcel => { %>
-                <p><%= parcel.numeroParcelas %>x de R$ <%= parcel.valorParcelado %></p>
-            <% }); %>
-        </div>
-
-        <!-- Botão de Confirmar Compra -->
-        <button type="submit">Confirmar Compra</button>
+    <!-- Botão para fazer logout -->
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
     </form>
 
     <script>
-        // JavaScript para exibir opções de pagamento baseadas na escolha do usuário
-        const pagamentoSelect = document.querySelector('select[name="pagamento"]');
-        const pixContainer = document.getElementById('pix-container');
-        const cartaoContainer = document.getElementById('cartao-container');
-
-        pagamentoSelect.addEventListener('change', function() {
-            if (this.value === 'pix') {
-                pixContainer.style.display = 'block';
-                cartaoContainer.style.display = 'none';
-            } else if (this.value === 'cartao') {
-                cartaoContainer.style.display = 'block';
-                pixContainer.style.display = 'none';
-            }
-        });
+        // Aqui podemos adicionar eventos em caso de necessidade adicional no futuro
+        // O formulário será enviado automaticamente quando a quantidade, cor ou tamanho for alterado
     </script>
 </body>
 </html>

@@ -26,4 +26,7 @@ router.post('/adicionar-carrinho', vendaController.adicionarAoCarrinho.bind(vend
 // Rota para atualizar o carrinho com as seleções de cor, tamanho e quantidade
 router.post('/atualizar-carrinho', vendaController.atualizarCarrinho.bind(vendaController));
 
+// Rota para exibir a página de formas de pagamento
+//router.get('/pagamento', vendaController.verPagamento.bind(vendaController));
+
 module.exports = router;
