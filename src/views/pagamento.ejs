@@ -1,67 +1,45 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formas de Pagamento</title>
-    <link rel="stylesheet" href="/pagamento.css">
+    <link rel="stylesheet" href="/pag.css">
 </head>
 <body>
-    <h1>Formas de Pagamento</h1>
+    <h1>Forma de Pagamento</h1>
 
-    <!-- Exibe os itens do carrinho sem opção de edição -->
-    <div class="carrinho">
-        <% carrinho.forEach(item => { %>
-            <div class="produto">
-                <h2><%= item.nome %></h2>
-                <p><%= item.descricao %></p>
-                <p>Preço: R$ <%= item.preco.toFixed(2) %></p>
-                <p>Quantidade: <%= item.quantidadeSelecionada || 1 %></p>
-            </div>
-        <% }); %>
-    </div>
+    <h2>Resumo do Carrinho</h2>
+    <ul>
+        <% carrinhoFinal.forEach(item => { %>
+            <li>
+                Produto: <%= item.nomeProduto %> <br>
+                Cor: <%= item.cor %> <br>
+                Tamanho: <%= item.tamanho %> <br>
+                Quantidade: <%= item.quantidade %> <br>
+                Preço: <%= item.preco %> <br>
+            </li>
+        <% }) %>
+    </ul>
 
-    <!-- Exibe o valor total -->
-    <h3>Valor Total: R$ <%= valorTotal.toFixed(2) %></h3>
+    <h3>Total da Compra: R$ <%= totalCompra %></h3>
 
-    <!-- Opções de pagamento -->
-    <form action="/confirmar-compra" method="post">
-        <div>
-            <label>
-                <input type="radio" name="formaPagamento" value="pix" required>
-                PIX
-            </label>
-            <div id="pix-container" style="display: none;">
-                <p><strong>Código PIX:</strong> <%= codigoPix %></p>
-            </div>
-        </div>
+    <form action="/concluir-compra" method="POST">
+        <h3>Escolha a Forma de Pagamento:</h3>
+        
+        <!-- PIX Option -->
+        <label for="pix">
+            <input type="radio" id="pix" name="metodoPagamento" value="pix" onclick="mostrarCodigoPix();"> PIX
+        </label><br>
 
-        <div>
-            <label>
-                <input type="radio" name="formaPagamento" value="cartao" required>
-                Cartão de Crédito
-            </label>
-            <div id="cartao-container" style="display: none;">
-                <label for="parcelas">Escolha o número de parcelas:</label>
-                <select name="parcelas">
-                    <% for (let i = 1; i <= 12; i++) { %>
-                        <option value="<%= i %>"><%= i %>x de R$ <%= (valorTotal / i).toFixed(2) %></option>
-                    <% } %>
-                </select>
-            </div>
-        </div>
+        <!-- Cartão de Crédito Option -->
+        <label for="cartao">
+            <input type="radio" id="cartao" name="metodoPagamento" value="cartao" onclick="mostrarParcelasCartao();"> Cartão de Crédito
+        </label><br>
 
-        <!-- Botão para confirmar compra -->
-        <button type="submit">Confirmar Compra</button>
+
+        <button type="submit">Concluir Compra</button>
     </form>
 
-    <script>
-        // Script para exibir as opções de PIX e Cartão com base na seleção
-        document.querySelectorAll('input[name="formaPagamento"]').forEach(input => {
-            input.addEventListener('change', function() {
-                document.getElementById('pix-container').style.display = (this.value === 'pix') ? 'block' : 'none';
-                document.getElementById('cartao-container').style.display = (this.value === 'cartao') ? 'block' : 'none';
-            });
-        });
-    </script>
 </body>
 </html>

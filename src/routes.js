@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('./controllers/auth-controller');
 const homeController = require('./controllers/home-controller');
 const vendaController = require('./controllers/venda-controller');
+const PagamentoController = require('./controllers/pagamento-controller');
 
 const router = express.Router();
 
@@ -27,6 +28,9 @@ router.post('/adicionar-carrinho', vendaController.adicionarAoCarrinho.bind(vend
 router.post('/atualizar-carrinho', vendaController.atualizarCarrinho.bind(vendaController));
 
 // Rota para exibir a página de formas de pagamento
-//router.get('/pagamento', vendaController.verPagamento.bind(vendaController));
+router.get('/pagamento', vendaController.pagamento.bind(vendaController));
+
+// Processar conclusão da compra
+router.post('/concluir-compra', PagamentoController.concluirCompra);
 
 module.exports = router;

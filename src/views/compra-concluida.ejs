@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra Concluída</title>
+    <link rel="stylesheet" href="/pag.css">
+</head>
+<body>
+    <h1>Compra Concluída</h1>
+
+    <p>Parabéns! Sua compra foi concluída com sucesso.</p>
+    <p>Forma de pagamento escolhida: <%= metodoPagamento %></p>
+
+    <h3>Resumo da Compra:</h3>
+    <ul>
+        <% carrinhoFinal.forEach(item => { %>
+            <li>
+                Produto: <%= item.nomeProduto %> <br>
+                Cor: <%= item.cor %> <br>
+                Tamanho: <%= item.tamanho %> <br>
+                Quantidade: <%= item.quantidade %> <br>
+                Preço: <%= item.preco %> <br>
+            </li>
+        <% }) %>
+    </ul>
+</body>
+</html>
