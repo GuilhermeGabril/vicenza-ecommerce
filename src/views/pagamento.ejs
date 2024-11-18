@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formas de Pagamento</title>
     <link rel="stylesheet" href="/pag.css">
+    <script>
+        function mostrarCodigoPix() {
+            document.getElementById('codigoPix').style.display = 'block';
+            document.getElementById('parcelasCartao').style.display = 'none';
+        }
+
+        function mostrarParcelasCartao() {
+            document.getElementById('codigoPix').style.display = 'none';
+            document.getElementById('parcelasCartao').style.display = 'block';
+        }
+    </script>
 </head>
 <body>
     <h1>Forma de Pagamento</h1>
@@ -17,7 +28,7 @@
                 Cor: <%= item.cor %> <br>
                 Tamanho: <%= item.tamanho %> <br>
                 Quantidade: <%= item.quantidade %> <br>
-                Preço: <%= item.preco %> <br>
+                Preço: R$ <%= item.preco %> <br>
             </li>
         <% }) %>
     </ul>
@@ -37,6 +48,23 @@
             <input type="radio" id="cartao" name="metodoPagamento" value="cartao" onclick="mostrarParcelasCartao();"> Cartão de Crédito
         </label><br>
 
+        <!-- Seção do Código PIX -->
+        <div id="codigoPix" style="display:none;">
+            <h4>Código PIX:</h4>
+            <p><%= codigoPix %></p> <!-- Exibe o código PIX gerado no controller -->
+        </div>
+
+        <!-- Seção das Parcelas do Cartão -->
+        <div id="parcelasCartao" style="display:none;">
+            <h4>Parcelas:</h4>
+            <select name="parcelaEscolhida">
+                <% parcelas.forEach(parcela => { %>
+                    <option value="<%= parcela.numeroParcelas %>">
+                        <%= parcela.numeroParcelas %>x de R$ <%= parcela.valorParcela %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
 
         <button type="submit">Concluir Compra</button>
     </form>

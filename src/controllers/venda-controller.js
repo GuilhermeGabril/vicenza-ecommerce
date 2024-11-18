@@ -146,35 +146,61 @@ class VendaController {
 
         res.redirect('/carrinho');
     }
-
+    gerarCodigoPix() {
+        // Exemplo de código PIX simples gerado aleatoriamente
+        const codigoPix = Math.random().toString(36).substr(2, 10).toUpperCase();
+        return codigoPix;
+    }
     // Método para a página de pagamento
-    pagamento(req, res) {
-        const userId = req.session.user?.idLogin;
-        if (!userId) {
-            return res.redirect('/');
-        }
-
-        const carrinhoFinal = this.carrinhoFinal[userId] || [];
-        let totalCompra = 0;
-
-        // Calcula o total da compra
-        carrinhoFinal.forEach(item => {
-            totalCompra += item.preco * item.quantidade;
-        });
-
-        // Renderiza a página de pagamento com as informações do carrinho
-        res.render('pagamento', {
-            carrinhoFinal: carrinhoFinal.map(item => ({
-                nomeProduto: item.nomeProduto,  // Apenas o nome do produto
-                cor: item.cor,
-                tamanho: item.tamanho,
-                quantidade: item.quantidade,
-                preco: item.preco
-            })),
-            totalCompra: totalCompra.toFixed(2)
+  // Método para gerar as parcelas do cartão
+  gerarParcelas(totalCompra, numeroParcelas) {
+    const parcelas = [];
+    
+    for (let i = 1; i <= numeroParcelas; i++) {
+        const valorParcela = (totalCompra / (i)).toFixed(2);  // O valor da parcela diminui conforme o número de parcelas
+        parcelas.push({
+            numeroParcelas: i,
+            valorParcela: valorParcela
         });
     }
 
+    return parcelas;
+}
+
+// Método de pagamento
+pagamento(req, res) {
+    const userId = req.session.user?.idLogin;
+    if (!userId) {
+        return res.redirect('/');
+    }
+
+    const carrinhoFinal = this.carrinhoFinal[userId] || [];
+    let totalCompra = 0;
+
+    // Calcula o total da compra
+    carrinhoFinal.forEach(item => {
+        totalCompra += item.preco * item.quantidade;
+    });
+
+    // Lógica para gerar código PIX e parcelas
+    const codigoPix = this.gerarCodigoPix(); // Gerar código PIX
+    const numeroParcelas = 12; // Número máximo de parcelas, você pode permitir que o usuário escolha
+    const parcelas = this.gerarParcelas(totalCompra, numeroParcelas); // Gerar as parcelas
+
+    // Renderiza a página de pagamento com as informações do carrinho, código PIX e parcelas
+    res.render('pagamento', {
+        carrinhoFinal: carrinhoFinal.map(item => ({
+            nomeProduto: item.nomeProduto,
+            cor: item.cor,
+            tamanho: item.tamanho,
+            quantidade: item.quantidade,
+            preco: item.preco
+        })),
+        totalCompra: totalCompra.toFixed(2),
+        codigoPix: codigoPix, // Passando o código PIX para a view
+        parcelas: parcelas // Passando as parcelas calculadas para a view
+    });
+}
 }
 
 module.exports = new VendaController();
