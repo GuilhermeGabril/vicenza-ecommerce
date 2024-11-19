@@ -1,26 +1,83 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/login.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+    </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <% if (error) { %>
-            <p class="error"><%= error %></p>
-        <% } %>
-        <form action="/auth/login" method="POST">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+    <header>
+        <div class="header-container">
+            <div class="logo">VCZA</div>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Pesquisar...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="icon-container"> <!-- Container para os ícones -->
+                <div class="flex space-x-4 items-center">
+                    <i class="fas fa-shopping-cart icon"></i>
+                    <i class="fas fa-shopping-cart icon"></i>
+                    <i class="fas fa-user-circle icon"></i>
+                </div>
+            </div>
+        </div>
+        <nav class="nav-container">
+            <a href="#">Moda Feminina</a>
+            <a href="#">Moda Masculina</a>
+            <a href="#">Moda Íntima</a>
+            <a href="#">Moda Fitness</a>
+            <a href="#">Pijamas</a>
+        </nav>
+    </header>
 
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" required>
+    <main>
+        <div>
+            <h1 class="form-title">Entrar na Conta</h1>
+        </div>    
+        <div class="form-body">
+            <div class="form-section">
+                <!-- Exibe mensagens de erro, se houver -->
+                <% if (error) { %>
+                    <p class="error"><%= error %></p>
+                <% } %>
+                <!-- Formulário de login -->
+                <form action="/auth/login" method="POST">
+                    <input type="text" name="email" placeholder="Email" required>
+                    <div class="password-container">
+                        <input type="password" name="senha" id="password" placeholder="Senha" required>
+                        <i id="togglePassword" class="fas fa-eye"></i>
+                    </div>
+                    <label>
+                        <input type="checkbox"> Mantenha-me conectado 
+                    </label>
+                    <input type="submit" value="Entrar">
+                </form>
 
-            <button type="submit">Entrar</button>
-        </form>
-    </div>
+                <!-- Links adicionais -->
+                <p class="small-text">
+                    Não tem conta? Faça o cadastro 
+                    <a href="/auth/register" class="link"><span class="green-text">aqui.</span></a> 
+                </p> 
+                <p class="small-text"><a href="/auth/forgot-password" class="link">Esqueci minha senha.</a></p> 
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Exibe e oculta a senha
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordField = document.querySelector('#password');
+        
+        togglePassword.addEventListener('click', () => {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            togglePassword.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 </html>

@@ -1,53 +1,227 @@
-/* Estilos gerais para a página de login */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 0;
+    color: #222;
+    background-color: #f9f9f9;
+    
 }
 
-.container {
-    background-color: #fff;
+header {
+    background-color: #FFEADD; 
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+main {
+    background-color: #ffffff;
+    margin: 50px auto;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+    margin-top: 0px;
+    height: 100%;
+    
+}
+
+.header-container { 
+    display: flex; 
+    align-items: center; 
+}
+
+.logo {
+    font-size: 3em;
+    font-family: "Crimson Text", serif;
+    margin-right: auto; 
+}
+
+.search-container {
+    position: relative; 
+    flex-grow: 1; 
+    margin-left: 10px; 
+}
+
+.search-bar {
+    padding: 10px 40px 10px 10px; 
+    border-radius: 15px;
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    width: 100%; 
+    align-items: right;
+}
+
+.search-icon {
+    position: absolute; 
+    right: 10px; 
+    top: 40%; 
+    transform: translateY(-50%); 
+    color: #ccc; 
+    margin-right: -20px;
+}
+
+.icon-container {
+    display: flex;
+
+}
+
+.icon {
+    width: 30px; 
+    height: 30px; 
+    padding: 0px; 
+
 }
 
 h1 {
-    color: #333;
-    margin-bottom: 20px;
+    font-size: 7em; 
+    font-family: "Crimson Text", serif; 
+    padding: 10px; 
+    margin: 0px;
+}
+
+.nav-container { 
+    text-align: center; 
+    margin-top: 10px; 
+}
+
+nav a {
+    color: #222;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 1.2em;
+    
+}
+
+nav a:hover { 
+    color: #426B1F; 
+}
+
+.form-section {
+    margin-bottom: 20px; 
+    max-width: 400px;
+    max-height: 500px;
+    width: 80%; 
+    height: 90%;
+    margin: 0 auto; 
+    background-color: #fbfaf8;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    
+}
+
+.form-title { 
+    font-size: 3em; 
+    font-family: "Crimson Text", serif;
+    margin-bottom: 15px;
+    
+}
+
+form {
+    display: flex;
+    flex-direction: column;
 }
 
 input[type="text"],
 input[type="password"] {
-    width: 100%;
     padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    margin-bottom: 10px;
+    border-radius: 8px; 
+    border: 1px solid #ccc; 
 }
 
-button {
-    width: 100%;
+input[type="checkbox"] {
+    margin-bottom: 10px; 
+}
+
+input[type="submit"] {
     padding: 10px;
-    background-color: #28a745;
-    color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 15px; 
+    background-color: #E9BA7D; 
+    color: #222; 
+    font-size: 1em; 
+    cursor: pointer; 
+    font-weight: bold;
+}
+
+input[type="submit"]:hover {
+background-color: #e6b89d; 
+}
+
+.small-text {
+    font-size: small; 
+    color: #426B1F; 
+    text-align: justify; 
+    margin-top: 10px; 
+}
+
+.link {
+    text-decoration: none; 
+    color: #426B1F; 
+}
+
+.green-text { 
+    color:#426B1F; 
+}
+
+.form-section {
+    padding-top: 4px;
+    margin-bottom: 20px; 
+}
+
+h1 {
+    font-size: 3em; 
+    font-family: "Crimson Text", serif;
+    margin-bottom: 20px;
+}
+
+.form-cart{
+    align-items: flex-end;
+}
+
+.flex {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.py-2 {
+    padding-top: 0.5rem; 
+    padding-bottom: 0.5rem; 
+}
+
+.border {
+    border: 1px solid #ccc; 
+    border-radius: 10px; 
+    padding: 8px 10px; 
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.subtitle{
+    display: flex;
+    text-align: left;
+    align-items: center;
+}
+
+.password-container {
+    position: relative; 
+    padding-right: 20.5px;
+}
+
+.password-container input {
+    width: 100%; 
+    
+}
+
+.password-container i {
+    position: absolute;
+    right: 12px; 
+    top: 40%;
+    transform: translateY(-50%); 
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #218838;
-}
-
-.error {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
 }
