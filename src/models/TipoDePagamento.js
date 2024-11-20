@@ -26,7 +26,8 @@ class TipoDePagamento {
 // Exemplo de tipos de pagamento
 const tiposDePagamento = [
     new TipoDePagamento("PIX", "Banco Digital"),
-    new TipoDePagamento("Cartão de Crédito", "Visa")
+    new TipoDePagamento("Cartão de Crédito", "Visa"),
+    new TipoDePagamento("Cartão de Débito", "Visa")
 ];
 
 // Exportando a classe e o exemplo de uso

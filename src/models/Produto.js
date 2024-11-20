@@ -52,6 +52,7 @@ const produtos = [
 produtos[0].adicionarAlocacao(new AlocTamanho(idCounter++, 10, cores[0], tamanhos[0], 50)); // Camiseta Branca
 produtos[0].adicionarAlocacao(new AlocTamanho(idCounter++, 15, cores[1], tamanhos[1], 55)); // Camiseta Branca
 produtos[0].adicionarAlocacao(new AlocTamanho(idCounter++, 20, cores[2], tamanhos[2], 60)); // Camiseta Branca
+produtos[0].adicionarAlocacao(new AlocTamanho(idCounter++, 20, cores[3], tamanhos[2], 60)); // Camiseta Branca
 
 produtos[1].adicionarAlocacao(new AlocTamanho(idCounter++, 8, cores[1], tamanhos[0], 50)); // Camiseta Preta
 produtos[1].adicionarAlocacao(new AlocTamanho(idCounter++, 12, cores[2], tamanhos[1], 55)); // Camiseta Preta

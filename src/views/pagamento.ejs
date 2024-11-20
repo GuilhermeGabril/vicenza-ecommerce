@@ -8,12 +8,12 @@
     <script>
         function mostrarCodigoPix() {
             document.getElementById('codigoPix').style.display = 'block';
-            document.getElementById('parcelasCartao').style.display = 'none';
+            document.getElementById('cartoesRegistrados').style.display = 'none';
         }
 
-        function mostrarParcelasCartao() {
+        function mostrarCartoesRegistrados() {
             document.getElementById('codigoPix').style.display = 'none';
-            document.getElementById('parcelasCartao').style.display = 'block';
+            document.getElementById('cartoesRegistrados').style.display = 'block';
         }
     </script>
 </head>
@@ -43,31 +43,35 @@
             <input type="radio" id="pix" name="metodoPagamento" value="pix" onclick="mostrarCodigoPix();"> PIX
         </label><br>
 
-        <!-- Cartão de Crédito Option -->
+        <!-- Cartão Option -->
         <label for="cartao">
-            <input type="radio" id="cartao" name="metodoPagamento" value="cartao" onclick="mostrarParcelasCartao();"> Cartão de Crédito
+            <input type="radio" id="cartao" name="metodoPagamento" value="cartao" onclick="mostrarCartoesRegistrados();"> Cartão
         </label><br>
 
         <!-- Seção do Código PIX -->
         <div id="codigoPix" style="display:none;">
             <h4>Código PIX:</h4>
-            <p><%= codigoPix %></p> <!-- Exibe o código PIX gerado no controller -->
+            <p><%= codigoPix %></p>
         </div>
 
-        <!-- Seção das Parcelas do Cartão -->
-        <div id="parcelasCartao" style="display:none;">
-            <h4>Parcelas:</h4>
-            <select name="parcelaEscolhida">
-                <% parcelas.forEach(parcela => { %>
-                    <option value="<%= parcela.numeroParcelas %>">
-                        <%= parcela.numeroParcelas %>x de R$ <%= parcela.valorParcela %>
-                    </option>
+        <!-- Seção dos Cartões Registrados -->
+        <div id="cartoesRegistrados" style="display:none;">
+            <h4>Seus Cartões:</h4>
+            <ul>
+                <% cartoes.forEach(cartao => { %>
+                    <li>
+                        <label>
+                            <input type="radio" name="cartaoSelecionado" value="<%= cartao.idCartao %>">
+                            Cartão: **** **** **** <%= cartao.numeroCartao.slice(-4) %> <br>
+                            Tipo: <%= cartao.tipo %> <br>
+                            Validade: <%= cartao.dataExpiracao %>
+                        </label>
+                    </li>
                 <% }) %>
-            </select>
+            </ul>
         </div>
 
         <button type="submit">Concluir Compra</button>
     </form>
-
 </body>
 </html>

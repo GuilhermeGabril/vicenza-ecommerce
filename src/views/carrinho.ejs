@@ -12,51 +12,41 @@
     <div class="carrinho">
         <% carrinho.forEach(item => { %>
             <div class="produto">
-                <h2><%= item.nome %></h2>
+                <h2><%= item.nomeProduto %></h2> <!-- Exibe o nome do produto -->
                 <p><%= item.descricao %></p>
-                <form action="/atualizar-carrinho" method="post">
-                    <input type="hidden" name="idProduto" value="<%= item.idProduto %>">
-                    
+                <form action="/atualizar-carrinho" method="POST">
+                    <input type="hidden" name="idProduto" value="<%= item.produto.idProduto %>">
                     <!-- Seleção de Cor -->
                     <label for="cor">Cor:</label>
-                    <select name="cor" onchange="this.form.submit()">
-                        <option value="">Selecione a cor</option> <!-- Opção vazia como padrão -->
-                        <% if (item.coresDisponiveis && item.coresDisponiveis.length > 0) { %>
-                            <% item.coresDisponiveis.forEach(cor => { %>
-                                <option value="<%= cor.nomeCor %>" <%= cor.nomeCor === item.corSelecionada ? 'selected' : '' %>>
-                                    <%= cor.nomeCor %>
-                                </option>
-                            <% }); %>
-                        <% } else { %>
-                            <option value="">Nenhuma cor disponível</option>
-                        <% } %>
+                    <select name="cor">
+                        <option value="">Selecione a cor</option>
+                        <% item.coresDisponiveis.forEach(cor => { %>
+                            <option value="<%= cor.nomeCor %>" <%= cor.nomeCor === item.corSelecionada ? 'selected' : '' %> >
+                                <%= cor.nomeCor %>
+                            </option>
+                        <% }); %>
                     </select>
-                    
-                    <!-- Seleção de Tamanho -->
                     <label for="tamanho">Tamanho:</label>
-                    <select name="tamanho" onchange="this.form.submit()">
-                        <option value="">Selecione o tamanho</option> <!-- Opção vazia como padrão -->
-                        <% if (item.tamanhosDisponiveis && item.tamanhosDisponiveis.length > 0) { %>
-                            <% item.tamanhosDisponiveis.forEach(tamanho => { %>
-                                <option value="<%= tamanho.tamanho %>" <%= tamanho.tamanho === item.tamanhoSelecionado ? 'selected' : '' %>>
-                                    <%= tamanho.tamanho %>
-                                </option>
-                            <% }); %>
-                        <% } else { %>
-                            <option value="">Nenhum tamanho disponível</option>
-                        <% } %>
+                    <select name="tamanho">
+                        <option value="">Selecione o tamanho</option>
+                        <% item.tamanhosDisponiveis.forEach(tamanho => { %>
+                            <option value="<%= tamanho.tamanho %>" <%= tamanho.tamanho === item.tamanhoSelecionado ? 'selected' : '' %> >
+                                <%= tamanho.tamanho %>
+                            </option>
+                        <% }); %>
                     </select>
-                    
+                
                     <!-- Seleção de Quantidade -->
                     <label for="quantidade">Quantidade:</label>
-                    <input type="number" name="quantidade" min="1" value="<%= item.quantidadeSelecionada || 1 %>" onchange="this.form.submit()">
+                    <input type="number" name="quantidade" min="1" value="<%= item.quantidade %>">
+                
+                    <button type="submit">Atualizar Carrinho</button>
                 </form>
-
                 <!-- Exibe o preço unitário do item -->
                 <p>Preço Unitário: R$ <%= item.preco.toFixed(2) %></p>
-
+                
                 <!-- Exibe o subtotal do item (preço unitário * quantidade) -->
-                <p>Subtotal: R$ <%= (item.preco * item.quantidadeSelecionada).toFixed(2) %></p>
+                <p>Subtotal: R$ <%= (item.preco * item.quantidade).toFixed(2) %></p>
             </div>
         <% }); %>
     </div>

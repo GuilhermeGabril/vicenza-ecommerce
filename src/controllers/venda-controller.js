@@ -1,151 +1,103 @@
-const Produtos = require('../models/Produto'); // Importa a lista de produtos
-const produtos = Produtos.produtos; // Obtém o array de produtos exportado do módulo
-const { alocacoes } = require('../models/AlocTamanho'); // Importa as alocações de tamanho e cor
-const { clientes } = require('../models/Cliente'); // Importa os clientes
+const Produtos = require('../models/Produto');
+const produtos = Produtos.produtos;
+const { clientes } = require('../models/Cliente');
+const Carrinho = require('../models/Carrinho'); // Verifique o caminho correto
+const { cartoes } = require('../models/Cartao');
 
 class VendaController {
     constructor() {
         this.carrinhos = {}; // Usamos um objeto para armazenar os carrinhos de cada usuário
-        this.carrinhoFinal = {}; // Variável para armazenar o carrinho final (apenas com os campos necessários)
     }
 
-    // Método para adicionar um produto ao carrinho
     adicionarAoCarrinho(req, res) {
-        const userId = req.session.user?.idLogin; // Pegue o ID de login do usuário logado
+        const userId = req.session.user?.idLogin;
         if (!userId) {
             return res.redirect('/'); // Se não estiver logado, redireciona para login
         }
 
-        const { idProduto } = req.body; // Pegue o ID do produto que está sendo adicionado ao carrinho
+        const { idProduto, cor, tamanho, quantidade } = req.body;
         const produto = produtos.find(p => p.idProduto === parseInt(idProduto));
 
         if (produto) {
-            // Se o usuário ainda não tem um carrinho, cria um
-            if (!this.carrinhos[userId]) {
-                this.carrinhos[userId] = [];
-            }
+            // Cria ou obtém o carrinho do usuário
+            const carrinho = this.carrinhos[userId] || new Carrinho();
+            this.carrinhos[userId] = carrinho; // Atualiza o carrinho do usuário
 
-            // Adiciona o produto ao carrinho do usuário logado
-            const itemCarrinho = { ...produto, quantidade: 1 }; // Inicializa quantidade em 1
-            this.carrinhos[userId].push(itemCarrinho);
+            // Cria um novo item e adiciona ao carrinho
+            const itemCarrinho = carrinho.criarItem(produto, cor, tamanho, 1);
+            carrinho.adicionarItem(itemCarrinho);
 
-            // Atualiza o carrinho final com as informações necessárias
-            const alocacaoSelecionada = produto.getAlocacoes().find(aloc =>
-                aloc.cor.nome === itemCarrinho.corSelecionada && aloc.tamanho.nome === itemCarrinho.tamanhoSelecionado
-            );
-
-            const preco = alocacaoSelecionada ? alocacaoSelecionada.preco : produto.valorVenda;
-
-            // Atualiza a variável carrinhoFinal
-            this.carrinhoFinal[userId] = this.carrinhoFinal[userId] || [];
-            this.carrinhoFinal[userId].push({
-                idProduto: itemCarrinho.idProduto,
-                nomeProduto: produto.nome,
-                cor: itemCarrinho.corSelecionada,
-                tamanho: itemCarrinho.tamanhoSelecionado,
-                quantidade: itemCarrinho.quantidadeSelecionada || 1,
-                preco,
-            });
-
-            console.log('Carrinho Final Atualizado (Adição):', this.carrinhoFinal[userId]);
+            console.log('Carrinho Atualizado (Adição):', carrinho.itens);
         }
 
-        res.redirect('/home'); // Redireciona de volta para a página inicial
+        res.redirect('/home');
     }
 
-    // Método para visualizar o carrinho
     verCarrinho(req, res) {
         const userId = req.session.user?.idLogin;
         if (!userId) {
-            return res.redirect('/'); // Redireciona para login se o usuário não estiver logado
+            return res.redirect('/'); // Se não estiver logado, redireciona para login
         }
 
-        const carrinho = this.carrinhos[userId] || []; // Obtém o carrinho do usuário logado
-        const cliente = clientes.find(c => c.idCliente === userId); // Obtém o cliente com base no ID de login
-        const enderecos = cliente ? cliente.enderecos : []; // Lista de endereços do cliente
+        const carrinho = this.carrinhos[userId] || new Carrinho(); // Obtém o carrinho do usuário
+        const cliente = clientes.find(c => c.idCliente === userId); // Obtém o cliente
+        const enderecos = cliente ? cliente.enderecos : []; // Endereços do cliente
 
-        // Calcula o total da compra e gera detalhes dos itens no carrinho
-        let totalCompra = 0;
-        const carrinhoDetalhado = carrinho.map(item => {
-            const produto = produtos.find(p => p.idProduto === item.idProduto);
+        // Calcula o total da compra
+        const totalCompra = carrinho.calcularTotal();
 
-            // Obtém as alocações para esse produto
-            const alocacaoSelecionada = produto.getAlocacoes().find(aloc => 
-                aloc.cor.nome === item.corSelecionada && aloc.tamanho.nome === item.tamanhoSelecionado
-            );
-
-            // Se a alocação for encontrada, usa o preço da alocação
-            const preco = alocacaoSelecionada ? alocacaoSelecionada.preco : produto.valorVenda;
-
-            // Calcula o total do item (preço * quantidade)
-            totalCompra += preco * item.quantidadeSelecionada;
-
-            // Obtém as cores e tamanhos disponíveis
+        // Detalhes dos itens do carrinho
+        const carrinhoDetalhado = carrinho.itens.map(item => {
+            const produto = produtos.find(p => p.idProduto === item.produto.idProduto);
+            const preco = produto.valorVenda; // Pode ser substituído por lógica de alocação
             const coresDisponiveis = produto.obterCores();
             const tamanhosDisponiveis = produto.obterTamanhos();
-
+        
             return {
                 ...item,
-                preco,  // Atualiza o preço com o valor da alocação
+                preco,
                 descricao: produto.descricao,
                 coresDisponiveis,
                 tamanhosDisponiveis,
+                corSelecionada: item.cor, // Adicionando cor selecionada
+                tamanhoSelecionado: item.tamanho // Adicionando tamanho selecionado
             };
         });
 
         res.render('carrinho', { 
             carrinho: carrinhoDetalhado, 
             enderecos,
-            totalCompra: totalCompra.toFixed(2) 
+            totalCompra: totalCompra.toFixed(2)
         });
     }
 
-    // Método para atualizar o carrinho (como cor, tamanho ou quantidade)
     atualizarCarrinho(req, res) {
         const userId = req.session.user?.idLogin;
         if (!userId) {
             return res.redirect('/'); // Se não estiver logado, redireciona para login
         }
-
-        const carrinho = this.carrinhos[userId] || [];
+    
         const { idProduto, cor, tamanho, quantidade } = req.body;
-
-        // Encontrar o item do carrinho e atualizar
-        const itemCarrinho = carrinho.find(p => p.idProduto === parseInt(idProduto));
-
-        if (itemCarrinho) {
-            itemCarrinho.corSelecionada = cor;
-            itemCarrinho.tamanhoSelecionado = tamanho;
-            itemCarrinho.quantidadeSelecionada = parseInt(quantidade);
-
-            // Atualiza o carrinho final com as novas informações
-            const produto = produtos.find(p => p.idProduto === itemCarrinho.idProduto);
-            const alocacaoSelecionada = produto.getAlocacoes().find(aloc =>
-                aloc.cor.nome === itemCarrinho.corSelecionada && aloc.tamanho.nome === itemCarrinho.tamanhoSelecionado
-            );
-
-            const preco = alocacaoSelecionada ? alocacaoSelecionada.preco : produto.valorVenda;
-
-            // Atualiza a variável carrinhoFinal
-            this.carrinhoFinal[userId] = this.carrinhoFinal[userId] || [];
-            this.carrinhoFinal[userId] = this.carrinhoFinal[userId].map(item => 
-                item.idProduto === itemCarrinho.idProduto 
-                    ? { 
-                        ...item, 
-                        nomeProduto: produto.nome,
-                        cor: itemCarrinho.corSelecionada, 
-                        tamanho: itemCarrinho.tamanhoSelecionado, 
-                        quantidade: itemCarrinho.quantidadeSelecionada, 
-                        preco 
-                    }
-                    : item
-            );
-
-            console.log('Carrinho Final Atualizado (Atualização):', this.carrinhoFinal[userId]);
+    
+        if (!idProduto || !quantidade || quantidade <= 0 || !cor || !tamanho) {
+            return res.status(400).send('Dados inválidos');
         }
-
-        res.redirect('/carrinho');
+    
+        // Obtém o carrinho do usuário ou cria um novo
+        const carrinho = this.carrinhos[userId] || new Carrinho();
+        
+        // Atualiza o item no carrinho
+        carrinho.atualizarItem(parseInt(idProduto), cor, tamanho, parseInt(quantidade));
+    
+        console.log('Carrinho Atualizado:', carrinho.itens);
+    
+        // Atualiza o carrinho do usuário
+        this.carrinhos[userId] = carrinho;
+    
+        res.redirect('/carrinho'); // Redireciona para a página do carrinho
     }
+    
+    
     gerarCodigoPix() {
         // Exemplo de código PIX simples gerado aleatoriamente
         const codigoPix = Math.random().toString(36).substr(2, 10).toUpperCase();
@@ -167,40 +119,57 @@ class VendaController {
     return parcelas;
 }
 
-// Método de pagamento
+
 pagamento(req, res) {
     const userId = req.session.user?.idLogin;
     if (!userId) {
         return res.redirect('/');
     }
 
-    const carrinhoFinal = this.carrinhoFinal[userId] || [];
-    let totalCompra = 0;
+    // Obtém o carrinho do usuário
+    const carrinho = this.carrinhos[userId] || new Carrinho(); // Obtém o carrinho do usuário
+    const totalCompra = carrinho.calcularTotal(); // Calcula o total usando o método calcularTotal()
 
-    // Calcula o total da compra
-    carrinhoFinal.forEach(item => {
-        totalCompra += item.preco * item.quantidade;
-    });
+    // Filtra os cartões do usuário
+    const cartoesUsuario = cartoes.filter(cartao => cartao.clienteId === userId);
 
-    // Lógica para gerar código PIX e parcelas
-    const codigoPix = this.gerarCodigoPix(); // Gerar código PIX
-    const numeroParcelas = 12; // Número máximo de parcelas, você pode permitir que o usuário escolha
-    const parcelas = this.gerarParcelas(totalCompra, numeroParcelas); // Gerar as parcelas
+    // Gera o código PIX
+    const codigoPix = this.gerarCodigoPix();
 
-    // Renderiza a página de pagamento com as informações do carrinho, código PIX e parcelas
+    // Renderiza a página de pagamento
     res.render('pagamento', {
-        carrinhoFinal: carrinhoFinal.map(item => ({
-            nomeProduto: item.nomeProduto,
+        carrinhoFinal: carrinho.itens.map(item => ({
+            nomeProduto: item.produto.nome,
             cor: item.cor,
             tamanho: item.tamanho,
             quantidade: item.quantidade,
-            preco: item.preco
+            preco: item.calcularTotalItem().toFixed(2)
         })),
         totalCompra: totalCompra.toFixed(2),
-        codigoPix: codigoPix, // Passando o código PIX para a view
-        parcelas: parcelas // Passando as parcelas calculadas para a view
+        codigoPix: codigoPix,
+        cartoes: cartoesUsuario // Passando os cartões do usuário
     });
 }
+concluirCompra(req, res) {
+    const metodoPagamento = req.body.metodoPagamento;
+    const cartaoSelecionado = req.body.cartaoSelecionado; // ID do cartão selecionado
+
+    if (metodoPagamento === 'cartao' && !cartaoSelecionado) {
+        return res.status(400).send('Nenhum cartão selecionado.');
+    }
+
+    if (metodoPagamento === 'cartao') {
+        console.log(`Cartão selecionado: ${cartaoSelecionado}`);
+        // Processar pagamento com o cartão selecionado
+    } else if (metodoPagamento === 'pix') {
+        console.log('Pagamento por PIX');
+        // Processar pagamento por PIX
+    }
+
+    // Lógica para finalizar a compra...
+    res.redirect('/compra-concluida');
+}
+
 }
 
 module.exports = new VendaController();
