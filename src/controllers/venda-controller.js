@@ -70,24 +70,39 @@ class VendaController {
             totalCompra: totalCompra.toFixed(2)
         });
     }
-
     atualizarCarrinho(req, res) {
         const userId = req.session.user?.idLogin;
         if (!userId) {
             return res.redirect('/'); // Se não estiver logado, redireciona para login
         }
     
-        const { idProduto, cor, tamanho, quantidade } = req.body;
+        const { itens } = req.body;
     
-        if (!idProduto || !quantidade || quantidade <= 0 || !cor || !tamanho) {
-            return res.status(400).send('Dados inválidos');
+        if (!Array.isArray(itens) || itens.length === 0) {
+            return res.status(400).send('Dados inválidos'); // Verifica se os itens foram enviados corretamente
         }
     
         // Obtém o carrinho do usuário ou cria um novo
         const carrinho = this.carrinhos[userId] || new Carrinho();
-        
-        // Atualiza o item no carrinho
-        carrinho.atualizarItem(parseInt(idProduto), cor, tamanho, parseInt(quantidade));
+    
+        // Itera sobre os itens e atualiza o carrinho
+        itens.forEach(item => {
+            const { idProduto, cor, tamanho, quantidade } = item;
+    
+            // Valida os dados do item
+            if (!idProduto || !cor || !tamanho || !quantidade || parseInt(quantidade) <= 0) {
+                console.warn(`Item inválido ignorado: ${JSON.stringify(item)}`);
+                return; // Ignora itens inválidos
+            }
+    
+            // Atualiza ou adiciona o item ao carrinho
+            carrinho.atualizarItem(
+                parseInt(idProduto),
+                cor,
+                tamanho,
+                parseInt(quantidade)
+            );
+        });
     
         console.log('Carrinho Atualizado:', carrinho.itens);
     

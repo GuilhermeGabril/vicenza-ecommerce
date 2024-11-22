@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrinho</title>
-    <link rel="stylesheet" href="/carrinho.css">
+    <link rel="stylesheet" href="/css/carrinho.css">
 </head>
 <body>
     <h1>Seu Carrinho</h1>
 
     <!-- Exibe os itens do carrinho -->
     <div class="carrinho">
-        <% carrinho.forEach(item => { %>
-            <div class="produto">
-                <h2><%= item.nomeProduto %></h2> <!-- Exibe o nome do produto -->
-                <p><%= item.descricao %></p>
-                <form action="/atualizar-carrinho" method="POST">
-                    <input type="hidden" name="idProduto" value="<%= item.produto.idProduto %>">
+        <!-- Formulário único para todos os itens -->
+        <form action="/atualizar-carrinho" method="POST">
+            <% carrinho.forEach((item, index) => { %>
+                <div class="produto">
+                    <h2><%= item.nomeProduto %></h2> <!-- Exibe o nome do produto -->
+                    <p><%= item.descricao %></p>
+                    <!-- ID do produto -->
+                    <input type="hidden" name="itens[<%= index %>][idProduto]" value="<%= item.produto.idProduto %>">
+                    
                     <!-- Seleção de Cor -->
                     <label for="cor">Cor:</label>
-                    <select name="cor">
+                    <select name="itens[<%= index %>][cor]">
                         <option value="">Selecione a cor</option>
                         <% item.coresDisponiveis.forEach(cor => { %>
                             <option value="<%= cor.nomeCor %>" <%= cor.nomeCor === item.corSelecionada ? 'selected' : '' %> >
@@ -26,8 +29,10 @@
                             </option>
                         <% }); %>
                     </select>
+
+                    <!-- Seleção de Tamanho -->
                     <label for="tamanho">Tamanho:</label>
-                    <select name="tamanho">
+                    <select name="itens[<%= index %>][tamanho]">
                         <option value="">Selecione o tamanho</option>
                         <% item.tamanhosDisponiveis.forEach(tamanho => { %>
                             <option value="<%= tamanho.tamanho %>" <%= tamanho.tamanho === item.tamanhoSelecionado ? 'selected' : '' %> >
@@ -38,17 +43,19 @@
                 
                     <!-- Seleção de Quantidade -->
                     <label for="quantidade">Quantidade:</label>
-                    <input type="number" name="quantidade" min="1" value="<%= item.quantidade %>">
+                    <input type="number" name="itens[<%= index %>][quantidade]" min="1" value="<%= item.quantidade %>">
                 
-                    <button type="submit">Atualizar Carrinho</button>
-                </form>
-                <!-- Exibe o preço unitário do item -->
-                <p>Preço Unitário: R$ <%= item.preco.toFixed(2) %></p>
-                
-                <!-- Exibe o subtotal do item (preço unitário * quantidade) -->
-                <p>Subtotal: R$ <%= (item.preco * item.quantidade).toFixed(2) %></p>
-            </div>
-        <% }); %>
+                    <!-- Exibe o preço unitário do item -->
+                    <p>Preço Unitário: R$ <%= item.preco.toFixed(2) %></p>
+                    
+                    <!-- Exibe o subtotal do item (preço unitário * quantidade) -->
+                    <p>Subtotal: R$ <%= (item.preco * item.quantidade).toFixed(2) %></p>
+                </div>
+            <% }); %>
+            
+            <!-- Botão para atualizar o carrinho -->
+            <button type="submit">Atualizar Carrinho</button>
+        </form>
     </div>
 
     <!-- Exibe o valor total do carrinho -->
