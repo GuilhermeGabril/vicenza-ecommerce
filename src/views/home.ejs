@@ -1,36 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Produtos</title>
-    <link rel="stylesheet" href="/css/home.css">
+    <title>VCZA - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/home.css"> <!-- Arquivo CSS personalizado -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+    </style>
 </head>
 <body>
-    <!-- Barra de navegação com o botão de logout -->
     <header>
-        <nav>
-            <% if (user) { %>
-                <a href="/carrinho" class="cart-button">Carrinho</a> <!-- Somente aparece se o usuário estiver logado -->
-                <a href="/auth/logout" class="logout-button">Logout</a>
-            <% } else { %>
-                <a href="/auth/login" class="login-button">Login</a> <!-- Se não estiver logado -->
-            <% } %>
+        <div class="header-container">
+            <div class="logo">VCZA</div>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Pesquisar...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="icon-container">
+                <div class="flex space-x-4 items-center">
+                    <a href="/carrinho"><i class="fas fa-shopping-cart icon"></i></a>
+                    <a href="/auth/login"><i class="fas fa-user-circle icon"></i></a>
+                 
+                </div>
+            </div>
+        </div>
+        <nav class="nav-container">
+            <a href="#">Moda Feminina</a>
+            <a href="#">Moda Masculina</a>
+            <a href="#">Moda Íntima</a>
+            <a href="#">Moda Fitness</a>
+            <a href="#">Pijamas</a>
         </nav>
     </header>
 
-    <!-- Seção de produtos -->
     <main>
-        <h1>Produtos</h1>
-        <div class="produtos-container">
+        <div class="flex w-full flex-col">
+            <div class="subtitle w-full">
+                <h1>Todos os Produtos</h1>
+                <div><%= produtos.length %> item(s)</div>
+            </div>
+
+            <div class="filter w-full">
+                <button class="filter-item">Filtros<i class="fas fa-filter"></i></button>
+                <button class="order-item">Ordenação <i class="fas fa-sort"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid">
             <% produtos.forEach(produto => { %>
-                <div class="produto-card">
-                    <h2><%= produto.nome %></h2>
-                    <p><%= produto.descricao %></p>
-                    <p>Preço: R$ <%= produto.valorVenda %></p>
+                <div class="product border">
+                    <img src="<%= produto.imagem %>" alt="Imagem do Produto" class="p-1 mr-4 product-image">
+                    <p class="font-bold text-lg mt-1"><%= produto.nome %></p>
+                    <p class="description"><%= produto.descricao %></p>
+                    <i class="far fa-heart favorite-icon" onclick="toggleFavorite(this)"></i>
+                    <div class="my-2 text-xl green-text price-text flex subtitle price">
+                        <p>R$ <%= produto.valorVenda.toFixed(2) %></p>
+                    </div>
                     <form action="/adicionar-carrinho" method="POST">
                         <input type="hidden" name="idProduto" value="<%= produto.idProduto %>">
-                        <button type="submit" class="add-to-cart">Adicionar ao Carrinho</button>
+                        <button type="submit" class="add-cart-button">Adicionar ao Carrinho</button>
                     </form>
                 </div>
             <% }) %>
