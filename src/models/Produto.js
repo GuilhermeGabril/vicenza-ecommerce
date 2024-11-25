@@ -38,7 +38,7 @@ class Produto {
     }
 }
 const produtos = [
-    new Produto(1, 'Camiseta Branca', 'Camiseta de algodão branca', 20.00, 50.00, './img/1.png'),
+    new Produto(1, 'Short Xadrez e Croped Canelado Conjunto De Dormir Pijama Algodão Confortável Feminino', 'Camiseta de algodão branca', 20.00, 50.00, './img/1.png'),
     new Produto(2, 'Camiseta Preta', 'Camiseta de algodão preta', 20.00, 50.00, '/img/2.png'),
     new Produto(3, 'Calça Jeans', 'Calça jeans azul', 40.00, 100.00, '/img/3.png'),
     new Produto(4, 'Jaqueta', 'Jaqueta de couro sintético', 80.00, 200.00, '/img/4.png'),
