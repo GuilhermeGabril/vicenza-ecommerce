@@ -148,6 +148,10 @@ pagamento(req, res) {
     // Filtra os cartões do usuário
     const cartoesUsuario = cartoes.filter(cartao => cartao.clienteId === userId);
 
+    // Obtém os endereços do usuário
+    const cliente = clientes.find(cliente => cliente.idCliente === userId); // Supondo que você tenha uma lista de clientes
+    const enderecosUsuario = cliente ? cliente.enderecos : []; // Obtém os endereços do cliente
+
     // Gera o código PIX
     const codigoPix = this.gerarCodigoPix();
 
@@ -158,13 +162,16 @@ pagamento(req, res) {
             cor: item.cor,
             tamanho: item.tamanho,
             quantidade: item.quantidade,
-            preco: item.calcularTotalItem().toFixed(2)
+            preco: item.calcularTotalItem().toFixed(2),
+            imagem: item.produto.imagem
         })),
         totalCompra: totalCompra.toFixed(2),
         codigoPix: codigoPix,
-        cartoes: cartoesUsuario // Passando os cartões do usuário
+        cartoes: cartoesUsuario, // Passando os cartões do usuário
+        enderecos: enderecosUsuario // Passando os endereços do usuário
     });
 }
+
 concluirCompra(req, res) {
     const metodoPagamento = req.body.metodoPagamento;
     const cartaoSelecionado = req.body.cartaoSelecionado; // ID do cartão selecionado

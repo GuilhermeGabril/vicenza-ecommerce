@@ -23,12 +23,15 @@
     <h2>Resumo do Carrinho</h2>
     <ul>
         <% carrinhoFinal.forEach(item => { %>
-            <li>
-                Produto: <%= item.nomeProduto %> <br>
-                Cor: <%= item.cor %> <br>
-                Tamanho: <%= item.tamanho %> <br>
-                Quantidade: <%= item.quantidade %> <br>
-                Preço: R$ <%= item.preco %> <br>
+            <li style="display: flex; align-items: center;">
+                <img src="<%= item.imagem %>" alt="Imagem do Produto" style="width: 50px; height: 50px; margin-right: 10px;">
+                <div>
+                    Produto: <%= item.nomeProduto %> <br>
+                    Cor: <%= item.cor %> <br>
+                    Tamanho: <%= item.tamanho %> <br>
+                    Quantidade: <%= item.quantidade %> <br>
+                    Preço: R$ <%= item.preco %> <br>
+                </div>
             </li>
         <% }) %>
     </ul>
@@ -37,7 +40,18 @@
 
     <form action="/concluir-compra" method="POST">
         <h3>Escolha a Forma de Pagamento:</h3>
-        
+
+        <!-- Seção de Endereço -->
+        <h3>Escolha um Endereço:</h3>
+        <select name="enderecoSelecionado" required>
+            <option value="">Selecione um endereço</option>
+            <% enderecos.forEach(endereco => { %>
+                <option value="<%= endereco.idEndereco %>">
+                    <%= endereco.rua %>, <%= endereco.numero %>, <%= endereco.bairro %>, <%= endereco.cidade %>, <%= endereco.estado %>
+                </option>
+            <% }) %>
+        </select>
+
         <!-- PIX Option -->
         <label for="pix">
             <input type="radio" id="pix" name="metodoPagamento" value="pix" onclick="mostrarCodigoPix();"> PIX
@@ -71,6 +85,7 @@
             </ul>
         </div>
 
+        <!-- Botão para concluir a compra -->
         <button type="submit">Concluir Compra</button>
     </form>
 </body>
