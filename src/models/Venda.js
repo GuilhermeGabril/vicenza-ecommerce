@@ -1,3 +1,5 @@
+const VendaItem = require('./VendaItem'); // Certifique-se de usar o caminho correto
+
 class Venda {
     constructor(idVenda, dataVenda, dataEntrega, cliente, endereco) {
         this.idVenda = idVenda;
@@ -8,8 +10,12 @@ class Venda {
         this.itens = []; // Lista de VendaItem para essa venda
     }
 
-    adicionarItem(vendaItem) {
-        this.itens.push(vendaItem);
+    adicionarItem(idVendaItem, quantidade, preco, produto) {
+        // Cria uma nova instância de VendaItem
+        const novoItem = new VendaItem(idVendaItem, quantidade, preco, produto);
+
+        // Adiciona o novo VendaItem à lista de itens
+        this.itens.push(novoItem);
     }
 }
 

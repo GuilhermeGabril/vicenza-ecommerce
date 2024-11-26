@@ -29,8 +29,7 @@ router.post('/atualizar-carrinho', vendaController.atualizarCarrinho.bind(vendaC
 // Rota para exibir a página de formas de pagamento
 router.get('/pagamento', vendaController.pagamento.bind(vendaController));
 
-
 // Processar conclusão da compra
-//router.post('/concluir-compra', PagamentoController.concluirCompra);
+router.post('/concluir-compra',  vendaController.concluirCompra.bind(vendaController));
 
 module.exports = router;

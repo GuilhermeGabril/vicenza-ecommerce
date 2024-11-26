@@ -1,92 +1,269 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formas de Pagamento</title>
-    <link rel="stylesheet" href="/pag.css">
-    <script>
-        function mostrarCodigoPix() {
-            document.getElementById('codigoPix').style.display = 'block';
-            document.getElementById('cartoesRegistrados').style.display = 'none';
+    <title>Carrinho</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/pag.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+    </style>
+  <script>
+    function mostrarCodigoPix() {
+        document.getElementById("codigoPix").style.display = "block";
+        const cartoesRegistrados = document.getElementById("cartoesRegistrados");
+        if (cartoesRegistrados) {
+            cartoesRegistrados.style.display = "none";
         }
+        document.getElementById("cartoesCredito").style.display = "none";
+        document.getElementById("cartoesDebito").style.display = "none";
+    }
 
-        function mostrarCartoesRegistrados() {
-            document.getElementById('codigoPix').style.display = 'none';
-            document.getElementById('cartoesRegistrados').style.display = 'block';
+    function mostrarCartoesRegistrados() {
+        const cartoesRegistrados = document.getElementById("cartoesRegistrados");
+        if (cartoesRegistrados) {
+            cartoesRegistrados.style.display = "block";
         }
-    </script>
+        document.getElementById("codigoPix").style.display = "none";
+        document.getElementById("cartoesCredito").style.display = "none";
+        document.getElementById("cartoesDebito").style.display = "none";
+    }
+
+    function mostrarCartaoDebito() {
+        // Ocultar cartões de crédito e Pix
+        document.getElementById("cartoesCredito").style.display = "none";
+        document.getElementById("codigoPix").style.display = "none";
+        // Exibir cartões de débito
+        const cartaoDebito = document.getElementById("cartoesDebito");
+        if (cartaoDebito) {
+            cartaoDebito.style.display = "block";
+        }
+    }
+
+    function mostrarCartaoCredito() {
+        // Ocultar cartões de débito e Pix
+        document.getElementById("cartoesDebito").style.display = "none";
+        document.getElementById("codigoPix").style.display = "none";
+        // Exibir cartões de crédito
+        const cartaoCredito = document.getElementById("cartoesCredito");
+        if (cartaoCredito) {
+            cartaoCredito.style.display = "block";
+        }
+    }
+</script>
+
 </head>
 <body>
-    <h1>Forma de Pagamento</h1>
-
-    <h2>Resumo do Carrinho</h2>
-    <ul>
-        <% carrinhoFinal.forEach(item => { %>
-            <li style="display: flex; align-items: center;">
-                <img src="<%= item.imagem %>" alt="Imagem do Produto" style="width: 50px; height: 50px; margin-right: 10px;">
-                <div>
-                    Produto: <%= item.nomeProduto %> <br>
-                    Cor: <%= item.cor %> <br>
-                    Tamanho: <%= item.tamanho %> <br>
-                    Quantidade: <%= item.quantidade %> <br>
-                    Preço: R$ <%= item.preco %> <br>
+    <header>
+        <div class="header-container">
+            <div class="logo">VCZA</div>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Pesquisar...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="icon-container">
+                <div class="flex space-x-4 items-center">
+                    <i class="fas fa-shopping-cart icon"></i>
+                    <i class="fas fa-shopping-cart icon"></i>
+                    <i class="fas fa-user-circle icon"></i>
                 </div>
-            </li>
-        <% }) %>
-    </ul>
+            </div>
+        </div>
+        <nav class="nav-container">
+            <a href="#">Moda Feminina</a>
+            <a href="#">Moda Masculina</a>
+            <a href="#">Moda Íntima</a> 
+            <a href="#">Moda Fitness</a>
+            <a href="#">Pijamas</a>
+        </nav>
+    </header>
 
-    <h3>Total da Compra: R$ <%= totalCompra %></h3>
-
-    <form action="/concluir-compra" method="POST">
-        <h3>Escolha a Forma de Pagamento:</h3>
-
-        <!-- Seção de Endereço -->
-        <h3>Escolha um Endereço:</h3>
-        <select name="enderecoSelecionado" required>
-            <option value="">Selecione um endereço</option>
-            <% enderecos.forEach(endereco => { %>
-                <option value="<%= endereco.idEndereco %>">
-                    <%= endereco.rua %>, <%= endereco.numero %>, <%= endereco.bairro %>, <%= endereco.cidade %>, <%= endereco.estado %>
-                </option>
-            <% }) %>
-        </select>
-
-        <!-- PIX Option -->
-        <label for="pix">
-            <input type="radio" id="pix" name="metodoPagamento" value="pix" onclick="mostrarCodigoPix();"> PIX
-        </label><br>
-
-        <!-- Cartão Option -->
-        <label for="cartao">
-            <input type="radio" id="cartao" name="metodoPagamento" value="cartao" onclick="mostrarCartoesRegistrados();"> Cartão
-        </label><br>
-
-        <!-- Seção do Código PIX -->
-        <div id="codigoPix" style="display:none;">
-            <h4>Código PIX:</h4>
-            <p><%= codigoPix %></p>
+    <main>
+        <div class="subtitle">
+            <h1>Carrinho</h1>
+            <div class="mt-4"> <%= carrinhoFinal.length %> item(s)</div>
         </div>
 
-        <!-- Seção dos Cartões Registrados -->
-        <div id="cartoesRegistrados" style="display:none;">
-            <h4>Seus Cartões:</h4>
-            <ul>
-                <% cartoes.forEach(cartao => { %>
-                    <li>
-                        <label>
-                            <input type="radio" name="cartaoSelecionado" value="<%= cartao.idCartao %>">
-                            Cartão: **** **** **** <%= cartao.numeroCartao.slice(-4) %> <br>
-                            Tipo: <%= cartao.tipo %> <br>
-                            Validade: <%= cartao.dataExpiracao %>
-                        </label>
-                    </li>
-                <% }) %>
-            </ul>
-        </div>
+        <div class="flex flex-col items-start my-8">
+            <div class="p-6 w-full">
+                <h3 class="font-semibold text-xl mb-4 items-label">Endereço de Entrega:</h3>
+                <div class="flex justify-between items-center py-2">
+                    <address class="font-semibold mb-4 w-full">
+                        <%= enderecos.length > 0 ? (enderecos[0].rua + ', ' + enderecos[0].numero + ', ' + enderecos[0].bairro + ', ' + enderecos[0].cep) : 'Nenhum endereço disponível' %>
+                    </address>
+                    <div class="btn-container flex">
+                        <button class="bg-transparent btn-address">Usar Endereço Principal</button>
+                        <button class="bg-transparent btn-newaddress">Usar Outro Endereço</button>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Botão para concluir a compra -->
-        <button type="submit">Concluir Compra</button>
-    </form>
+            <div class="products-list">
+                <div class="product-container w-full">
+                    <% carrinhoFinal.forEach(item => { %>
+                    <div class="rounded-lg p-4 my-4 bg-gray-100 flex">
+                        <img src="<%= item.imagem %>" alt="Imagem do produto" class="p-1 mr-4 product-image" style="width: 150px; height: 150px; object-fit: cover;">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center">
+                                <h2 class="font-bold text-lg mt-1"><%= item.nomeProduto %></h2>
+                                <div class="my-2 text-xl green-text text-left price-text flex subtitle">R$<%= item.preco %></div>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <label class="text-gray-700">Cor:</label>
+                                <span class="text-gray-800"><%= item.cor %></span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <label class="text-gray-700">Quantidade:</label>
+                                <span class="text-gray-800"><%= item.quantidade %></span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <label class="text-gray-700">Tamanho:</label>
+                                <span class="text-gray-800"><%= item.tamanho %></span>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+
+                <div class="cupon-container mt-6 w-full flex-col flex">
+                    <label for="coupon" class="font-semibold text-xl mb-2 items-label">Cupons de Desconto:</label>
+                    <input type="text" id="coupon" placeholder="Insira o Código do seu Cupom" class="border rounded py-2 px-4 w-full input-size">
+                </div>
+
+                <div class="my-6 mt-6 w-full flex-col flex w-full">
+                    <p class="font-semibold text-xl mb-2 block items-label">Método de Pagamento:</p>
+                    <div class="mt-2 w-full">
+
+                        <!-- Método Pix -->
+                        <div class="label-container flex justify-between w-full border-bottom-1 flex-col">
+                            <label class="label-container flex justify-between w-full flex-col">
+                                <div>
+                                    <input type="radio" name="paymentMethod" value="pix" class="form-radio" onclick="mostrarCodigoPix();">
+                                    <span class="w-full">PIX</span>
+                                </div>
+                            </label>
+
+                            <div class="border cod-pix-cont w-full" id="codigoPix" style="display:none;">
+                                <div class="flex items-center justify-between py-2 flex-col">
+                                    <img src="https://logospng.org/download/pix/logo-pix-1024.png" alt="Logo do Pix" class="pix-image">
+                                    <pre class="pix-cod"><%= codigoPix %></pre>
+                                    <button class="copy-button">Copiar o código</button>
+                                </div>
+
+                                <div class="intructions-cont flex flex-col font-bold">
+                                    <div class="font-semibold mb-2">Siga Essas Instruções:</div>
+                                    <ol class="list-decimal ml-4">
+                                        <li>Copie o código acima.</li>
+                                        <li>Acesse o app do seu banco ou internet banking de preferência.</li>
+                                        <li>Escolha pagar com Pix, cole o código e finalize o pagamento.</li>
+                                        <li>Seu pagamento será aprovado em breve.</li>
+                                        <li>Após o pagamento ser aprovado, finalize seu pedido.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cartão de Débito -->
+                        <div class="label-container flex justify-between w-full border-bottom-1 flex-col">
+                            <label class="label-container mb-2 flex justify-between items-center w-full">
+                                <input type="radio" name="paymentMethod" value="débito" class="form-radio" onclick="mostrarCartaoDebito();">
+                                <span class="w-full">Cartão de Débito</span>
+                            </label>
+                        </div>
+                                  <!-- Exibição dos cartões de débito -->
+                                  <div id="cartoesDebito" style="display:none;">
+                                    <h4>Seus Cartões de Débito:</h4>
+                                    <ul>
+                                        <% cartoes.forEach(cartao => { %>
+                                            <% if (cartao.tipo === "débito") { %>
+                                                <li>
+                                                    <label>
+                                                        <input type="radio" name="cartaoSelecionado" value="<%= cartao.idCartao %>">
+                                                        Cartão: **** **** **** <%= cartao.numeroCartao.slice(-4) %> - <%= cartao.bandeira %>
+                                                    </label>
+                                                </li>
+                                            <% } %>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+
+
+                        <!-- Cartão de Crédito -->
+                        <div class="label-container flex justify-between w-full border-bottom-1 flex-col">
+                            <label class="label-container mb-2 flex justify-between items-center w-full">
+                                <input type="radio" name="paymentMethod" value="crédito" class="form-radio" onclick="mostrarCartaoCredito();">
+                                <span class="w-full">Cartão de Crédito</span>
+                            </label>
+
+                            <!-- Exibição dos cartões de crédito -->
+                            <div id="cartoesCredito" style="display:none;">
+                                <h4>Seus Cartões de Crédito:</h4>
+                                <ul>
+                                    <% cartoes.forEach(cartao => { %>
+                                        <% if (cartao.tipo === "crédito") { %>
+                                            <li>
+                                                <label>
+                                                    <input type="radio" name="cartaoSelecionado" value="<%= cartao.idCartao %>">
+                                                    Cartão: **** **** **** <%= cartao.numeroCartao.slice(-4) %> - <%= cartao.bandeira %>
+                                                </label>
+                                            </li>
+                                        <% } %>
+                                    <% }) %>
+                                </ul>
+                                 <!-- Exibição do número de parcelas -->
+                                 <div class="mt-4 installments border flex justify-between">
+                                    <label for="installments" class="w-full installments-label" >Número de Parcelas:</label>
+                                    
+                                    <select id="installments" class="border installments-select">
+                                        <option value="1">1x</option>
+                                        <option value="2">2x</option>
+                                        <option value="3">3x</option>
+                                        <option value="4">4x</option>
+                                        <option value="5">5x</option>
+                                        <option value="6">6x</option>
+                                    </select>
+                            </div>
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-container w-full form-cart">
+                    <div class="rounded-lg p-4 bg-white w-full">
+                        <h2 class="font-bold text-lg mb-2">Detalhes</h2>
+                
+                        <!-- Subtotal -->
+                        <div class="flex justify-between py-2 font-bold">
+                            <span>Subtotal</span>
+                            <span class="green-text">R$<%= totalCompra %></span> <!-- Total da compra (subtotal) -->
+                        </div>
+                
+                        <!-- Frete -->
+                        <div class="flex justify-between py-2">
+                            <span>Frete</span>
+                            <span class="green-text">R$20,00</span> <!-- Frete fixo atualizado -->
+                        </div>
+                
+                        <!-- Total Final -->
+                        <div class="flex justify-between py-2 font-bold">
+                            <span>Total</span>
+                            <span class="green-text">R$<%= (Number(totalCompra) + 20.00).toFixed(2) %></span>
+                        </div>
+                
+                        <div class="continue-button">
+                            <form action="/concluir-compra" method="POST">
+                                <input type="submit" value="Fazer Pedido">
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
+
+
+

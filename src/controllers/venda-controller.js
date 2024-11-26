@@ -3,10 +3,13 @@ const produtos = Produtos.produtos;
 const { clientes } = require('../models/Cliente');
 const Carrinho = require('../models/Carrinho'); // Verifique o caminho correto
 const { cartoes } = require('../models/Cartao');
+const Venda = require('../models/Venda');
+const VendaItem = require('../models/VendaItem');
 
 class VendaController {
     constructor() {
         this.carrinhos = {}; // Usamos um objeto para armazenar os carrinhos de cada usuário
+        this.vendas = []; // Lista de vendas registradas
     }
 
     adicionarAoCarrinho(req, res) {
@@ -173,24 +176,74 @@ pagamento(req, res) {
 }
 
 concluirCompra(req, res) {
-    const metodoPagamento = req.body.metodoPagamento;
-    const cartaoSelecionado = req.body.cartaoSelecionado; // ID do cartão selecionado
-
-    if (metodoPagamento === 'cartao' && !cartaoSelecionado) {
-        return res.status(400).send('Nenhum cartão selecionado.');
+    const userId = req.session.user?.idLogin;
+    if (!userId) {
+        return res.redirect('/'); // Se não estiver logado, redireciona para login
     }
 
-    if (metodoPagamento === 'cartao') {
-        console.log(`Cartão selecionado: ${cartaoSelecionado}`);
-        // Processar pagamento com o cartão selecionado
-    } else if (metodoPagamento === 'pix') {
-        console.log('Pagamento por PIX');
-        // Processar pagamento por PIX
+    // Verifica se o carrinho do usuário existe
+    const carrinho = this.carrinhos[userId];
+    if (!carrinho || carrinho.itens.length === 0) {
+        return res.status(400).send('Carrinho vazio. Não é possível concluir a compra.');
     }
 
-    // Lógica para finalizar a compra...
-    res.redirect('/compra-concluida');
+    // Obtém o cliente e o endereço de entrega
+    const cliente = clientes.find(cliente => cliente.idCliente === userId);
+    if (!cliente) {
+        return res.status(400).send('Cliente não encontrado.');
+    }
+
+    const endereco = cliente.enderecos[0]; // Usa o endereço principal (endereços[0])
+    if (!endereco) {
+        return res.status(400).send('Endereço de entrega não encontrado.');
+    }
+
+    // Cria a venda
+    const idVenda = this.vendas.length + 1; // Gera um novo ID para a venda
+    const dataVenda = new Date().toISOString(); // Data atual
+    const dataEntrega = new Date();
+    dataEntrega.setDate(dataEntrega.getDate() + 7); // Define entrega para 7 dias após a venda
+
+    const novaVenda = new Venda(idVenda, dataVenda, dataEntrega, cliente, endereco);
+
+    // Adiciona os itens do carrinho à venda como VendaItem
+    carrinho.itens.forEach((item, index) => {
+        novaVenda.adicionarItem(
+            index + 1, // ID do item na venda
+            item.quantidade,
+            item.produto.valorVenda,
+            item.produto
+        );
+    });
+
+    // Salva a venda
+    this.vendas.push(novaVenda);
+
+    // Exibe os detalhes da venda no console
+    console.log('Venda Concluída:', {
+        idVenda: novaVenda.idVenda,
+        dataVenda: novaVenda.dataVenda,
+        dataEntrega: novaVenda.dataEntrega,
+        cliente: {
+            idCliente: novaVenda.cliente.idCliente,
+            nome: novaVenda.cliente.nome
+        },
+        endereco: novaVenda.endereco,
+        itens: novaVenda.itens.map(item => ({
+            idVendaItem: item.idVendaItem,
+            produto: item.produto.nome,
+            quantidade: item.quantidade,
+            preco: item.preco
+        }))
+    });
+
+    // Limpa o carrinho do usuário
+    this.carrinhos[userId] = new Carrinho();
+
+    // Redireciona para a página de compra concluída
+    res.redirect('/home');
 }
+
 
 }
 
