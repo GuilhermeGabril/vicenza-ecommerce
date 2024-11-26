@@ -229,7 +229,8 @@ concluirCompra(req, res) {
         tipoPagamento: tipoPagamento.nome,
         itens: novaVenda.itens.map(item => ({
             idVendaItem: item.idVendaItem,
-            produto: item.produto.nome,
+            produto: item.produto,
+            produtoNome: item.produto.nome,
             quantidade: item.quantidade,
             preco: item.preco
         }))
