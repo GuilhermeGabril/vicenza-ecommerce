@@ -36,6 +36,25 @@ class Produto {
         const tamanhosDisponiveis = this.alocacoes.map(aloc => aloc.tamanho);
         return [...new Set(tamanhosDisponiveis)]; // Retorna tamanhos únicos
     }
+    getidProduto(){
+        return this.idProduto;
+    }
+    getvalorCompra(){
+        return this.valorCompra;
+    }
+    getvalorVenda(){
+        return this.valorVenda;
+    }
+    getimagem(){
+        return this.imagem;
+    }
+    getnome(){
+        return this.nome;
+    }
+    getdescricao(){
+        return this.descricao;
+    }
+
 }
 const produtos = [
     new Produto(1, 'Calça Xadrez e Blusa Conjunto De Dormir Pijama Suede Algodão Confortável Feminino Manga Curta', 'Conjunto confortável de algodão', 20.00, 50.00, './img/1.png'),

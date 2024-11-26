@@ -11,6 +11,12 @@ class Cliente {
         this.login = login;  // Associa o login ao cliente
         this.enderecos = enderecos; // Lista de endereços do cliente
     }
+    getidCliente(){
+        return this.idCliente;
+    }
+    getenderecos(){
+        return this.enderecos;
+    }
 }
 
 // Criando alguns clientes e associando endereços

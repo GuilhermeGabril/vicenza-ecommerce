@@ -7,6 +7,9 @@ class Cartao {
         this.clienteId = clienteId; // Relaciona o cartão a um cliente
         this.tipo = tipo; // Tipo do cartão: "débito" ou "crédito"
     }
+    getclienteId(){
+        return this.clienteId;
+    }
 }
 
 // Exemplo de criação de cartões para um cliente específico

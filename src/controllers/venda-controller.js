@@ -19,7 +19,7 @@ class VendaController {
         }
 
         const { idProduto, cor, tamanho, quantidade } = req.body;
-        const produto = produtos.find(p => p.idProduto === parseInt(idProduto));
+        const produto = produtos.find(p => p.getidProduto() === parseInt(idProduto));
 
         if (produto) {
             // Cria ou obtém o carrinho do usuário
@@ -43,16 +43,16 @@ class VendaController {
         }
 
         const carrinho = this.carrinhos[userId] || new Carrinho(); // Obtém o carrinho do usuário
-        const cliente = clientes.find(c => c.idCliente === userId); // Obtém o cliente
-        const enderecos = cliente ? cliente.enderecos : []; // Endereços do cliente
+        const cliente = clientes.find(c => c.getidCliente() === userId); // Obtém o cliente
+        const enderecos = cliente ? cliente.getenderecos() : []; // Endereços do cliente
 
         // Calcula o total da compra
         const totalCompra = carrinho.calcularTotal();
 
         // Detalhes dos itens do carrinho
         const carrinhoDetalhado = carrinho.itens.map(item => {
-            const produto = produtos.find(p => p.idProduto === item.produto.idProduto);
-            const preco = produto.valorVenda; // Pode ser substituído por lógica de alocação
+            const produto = produtos.find(p => p.getidProduto() === item.produto.idProduto);
+            const preco = produto.getvalorVenda(); 
             const coresDisponiveis = produto.obterCores();
             const tamanhosDisponiveis = produto.obterTamanhos();
         
@@ -119,21 +119,6 @@ class VendaController {
         const codigoPix = Math.random().toString(36).substr(2, 10).toUpperCase();
         return codigoPix;
     }
-    // Método para a página de pagamento
-  // Método para gerar as parcelas do cartão
-  gerarParcelas(totalCompra, numeroParcelas) {
-    const parcelas = [];
-    
-    for (let i = 1; i <= numeroParcelas; i++) {
-        const valorParcela = (totalCompra / (i)).toFixed(2);  // O valor da parcela diminui conforme o número de parcelas
-        parcelas.push({
-            numeroParcelas: i,
-            valorParcela: valorParcela
-        });
-    }
-
-    return parcelas;
-}
 
 
 pagamento(req, res) {
@@ -147,11 +132,11 @@ pagamento(req, res) {
     const totalCompra = carrinho.calcularTotal(); // Calcula o total usando o método calcularTotal()
 
     // Filtra os cartões do usuário
-    const cartoesUsuario = cartoes.filter(cartao => cartao.clienteId === userId);
+    const cartoesUsuario = cartoes.filter(cartao => cartao.getclienteId() === userId);
 
     // Obtém os endereços do usuário
-    const cliente = clientes.find(cliente => cliente.idCliente === userId); // Supondo que você tenha uma lista de clientes
-    const enderecosUsuario = cliente ? cliente.enderecos : []; // Obtém os endereços do cliente
+    const cliente = clientes.find(cliente => cliente.getidCliente() === userId); // Supondo que você tenha uma lista de clientes
+    const enderecosUsuario = cliente ? cliente.getenderecos() : []; // Obtém os endereços do cliente
 
     // Gera o código PIX
     const codigoPix = this.gerarCodigoPix();
@@ -186,7 +171,7 @@ concluirCompra(req, res) {
     }
 
     // Obtém o cliente e o endereço de entrega
-    const cliente = clientes.find(cliente => cliente.idCliente === userId);
+    const cliente = clientes.find(cliente => cliente.getidCliente() === userId);
     if (!cliente) {
         return res.status(400).send('Cliente não encontrado.');
     }

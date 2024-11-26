@@ -4,6 +4,9 @@ class Tamanho {
         this.tamanho = tamanho;
         this.descricao = descricao;
     }
+    gettamanho(){
+        return this.tamanho;
+    }
 }
 
 // Declaração dos tamanhos P, M, G

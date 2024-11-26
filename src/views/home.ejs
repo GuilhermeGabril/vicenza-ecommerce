@@ -52,14 +52,14 @@
         <div class="product-grid">
             <% produtos.forEach(produto => { %>
                 <div class="product border">
-                    <img src="<%= produto.imagem %>" alt="Imagem do Produto" class="p-1 mr-4 product-image">
-                    <p class="font-bold text-lg mt-1"><%= produto.nome %></p>
+                    <img src="<%= produto.getimagem() %>" alt="Imagem do Produto" class="p-1 mr-4 product-image">
+                    <p class="font-bold text-lg mt-1"><%= produto.getnome() %></p>
                     <i class="far fa-heart favorite-icon" onclick="toggleFavorite(this)"></i>
                     <div class="my-2 text-xl green-text price-text flex subtitle price">
-                        <p>R$ <%= produto.valorVenda.toFixed(2) %></p>
+                        <p>R$ <%= produto.getvalorVenda().toFixed(2) %></p>
                     </div>
                     <form action="/adicionar-carrinho" method="POST">
-                        <input type="hidden" name="idProduto" value="<%= produto.idProduto %>">
+                        <input type="hidden" name="idProduto" value="<%= produto.getidProduto()%>">
                         <button type="submit" class="add-cart-button">Adicionar ao Carrinho</button>
                     </form>
                 </div>

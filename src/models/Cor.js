@@ -6,6 +6,9 @@ class Cor {
         this.nomeCor = nomeCor;
         this.hexadecimal = hexadecimal;
     }
+    getnomeCor(){
+        return this.nomeCor;
+    }
 }
 
 // Exemplo de cores

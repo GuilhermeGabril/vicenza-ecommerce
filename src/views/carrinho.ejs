@@ -34,7 +34,6 @@
     <main>
         <div class="subtitle">
             <h1>Carrinho</h1> <!-- Título do carrinho -->
-            <div class="mt-4">1 item(s)</div>
         </div>
 
         <div class="flex justify-between items-start">
@@ -46,16 +45,16 @@
                 <form action="/atualizar-carrinho" method="POST" class="product-container">
                     <% carrinho.forEach((item, index) => { %>
                         <div class="rounded-lg p-4 my-4 bg-gray-100 flex">
-                            <img src="<%= item.produto.imagem %>" alt="Imagem do Produto" class="p-1 mr-4 product-image">
+                            <img src="<%= item.produto.getimagem() %>" alt="Imagem do Produto" class="p-1 mr-4 product-image">
                             <div class="flex-1">
                                 <div class="flex-col">
-                                    <h2 class="font-bold mt-1"><%= item.produto.nome %></h2>
+                                    <h2 class="font-bold mt-1"><%= item.produto.getnome() %></h2>
                                     <p><%= item.descricao %></p>
                                     <p class="my-2 text-xl green-text price-text">R$<%= item.preco.toFixed(2) %></p>
                                 </div>
                                 
                                 <!-- ID do produto -->
-                                <input type="hidden" name="itens[<%= index %>][idProduto]" value="<%= item.produto.idProduto %>">
+                                <input type="hidden" name="itens[<%= index %>][idProduto]" value="<%= item.produto.getidProduto() %>">
                                 
                                 <!-- Seleção de Cor -->
                                 <div class="flex justify-between items-center py-2">
@@ -63,8 +62,8 @@
                                     <select name="itens[<%= index %>][cor]" class="border">
                                         <option value="">Selecione a cor</option>
                                         <% item.coresDisponiveis.forEach(cor => { %>
-                                            <option value="<%= cor.nomeCor %>" <%= cor.nomeCor === item.corSelecionada ? 'selected' : '' %> >
-                                                <%= cor.nomeCor %>
+                                            <option value="<%= cor.getnomeCor() %>" <%= cor.nomeCor === item.corSelecionada ? 'selected' : '' %> >
+                                                <%= cor.getnomeCor() %>
                                             </option>
                                         <% }); %>
                                     </select>
@@ -76,8 +75,8 @@
                                     <select name="itens[<%= index %>][tamanho]" class="border">
                                         <option value="">Selecione o tamanho</option>
                                         <% item.tamanhosDisponiveis.forEach(tamanho => { %>
-                                            <option value="<%= tamanho.tamanho %>" <%= tamanho.tamanho === item.tamanhoSelecionado ? 'selected' : '' %> >
-                                                <%= tamanho.tamanho %>
+                                            <option value="<%= tamanho.gettamanho() %>" <%= tamanho.tamanho === item.tamanhoSelecionado ? 'selected' : '' %> >
+                                                <%= tamanho.gettamanho() %>
                                             </option>
                                         <% }); %>
                                     </select>
