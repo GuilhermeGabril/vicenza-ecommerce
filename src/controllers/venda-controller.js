@@ -95,7 +95,7 @@ class VendaController {
             // Valida os dados do item
             if (!idProduto || !cor || !tamanho || !quantidade || parseInt(quantidade) <= 0) {
                 console.warn(`Item inválido ignorado: ${JSON.stringify(item)}`);
-                return; // Ignora itens inválidos
+                return; // Ignora itens inválidos e continua com os demais
             }
     
             // Atualiza ou adiciona o item ao carrinho
@@ -114,8 +114,6 @@ class VendaController {
     
         res.redirect('/carrinho'); // Redireciona para a página do carrinho
     }
-    
-    
     gerarCodigoPix() {
         // Exemplo de código PIX simples gerado aleatoriamente
         const codigoPix = Math.random().toString(36).substr(2, 10).toUpperCase();

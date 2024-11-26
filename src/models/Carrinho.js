@@ -14,7 +14,6 @@ class Carrinho {
         this.itens.push(item);
     }
 
-    // Função para atualizar um item no carrinho
     atualizarItem(idProduto, cor, tamanho, quantidade) {
         const item = this.itens.find(item => item.produto.idProduto === idProduto);
 
