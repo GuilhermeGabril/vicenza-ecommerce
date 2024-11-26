@@ -5,6 +5,8 @@ const Carrinho = require('../models/Carrinho'); // Verifique o caminho correto
 const { cartoes } = require('../models/Cartao');
 const Venda = require('../models/Venda');
 const VendaItem = require('../models/VendaItem');
+const { tiposDePagamento } = require('../models/TipoDePagamento');
+
 
 class VendaController {
     constructor() {
@@ -181,13 +183,25 @@ concluirCompra(req, res) {
         return res.status(400).send('Endereço de entrega não encontrado.');
     }
 
+    // Captura o tipo de pagamento
+    const tipoPagamentoSelecionado = req.body.tipoPagamento;
+    if (!tipoPagamentoSelecionado) {
+        return res.status(400).send('Tipo de pagamento não selecionado.');
+    }
+
+    // Busca o tipo de pagamento no array `tiposDePagamento`
+    const tipoPagamento = tiposDePagamento.find(tp => tp.nome.toLowerCase() === tipoPagamentoSelecionado.toLowerCase());
+    if (!tipoPagamento) {
+        return res.status(400).send('Tipo de pagamento inválido.');
+    }
+
     // Cria a venda
     const idVenda = this.vendas.length + 1; // Gera um novo ID para a venda
     const dataVenda = new Date().toISOString(); // Data atual
     const dataEntrega = new Date();
     dataEntrega.setDate(dataEntrega.getDate() + 7); // Define entrega para 7 dias após a venda
 
-    const novaVenda = new Venda(idVenda, dataVenda, dataEntrega, cliente, endereco);
+    const novaVenda = new Venda(idVenda, dataVenda, dataEntrega, cliente, endereco, tipoPagamento);
 
     // Adiciona os itens do carrinho à venda como VendaItem
     carrinho.itens.forEach((item, index) => {
@@ -212,6 +226,7 @@ concluirCompra(req, res) {
             nome: novaVenda.cliente.nome
         },
         endereco: novaVenda.endereco,
+        tipoPagamento: tipoPagamento.nome,
         itens: novaVenda.itens.map(item => ({
             idVendaItem: item.idVendaItem,
             produto: item.produto.nome,

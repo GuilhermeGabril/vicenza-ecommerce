@@ -255,8 +255,18 @@
                 
                         <div class="continue-button">
                             <form action="/concluir-compra" method="POST">
+                                <input type="hidden" name="tipoPagamento" id="tipoPagamentoSelecionado">
                                 <input type="submit" value="Fazer Pedido">
                             </form>
+
+                        <script>
+                        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+                        radio.addEventListener('change', () => {
+                        const tipoPagamento = radio.value;
+                        document.getElementById('tipoPagamentoSelecionado').value = tipoPagamento;
+                                                    });
+                                                                });
+                        </script>
                         </div>
                     </div>
             </div>
