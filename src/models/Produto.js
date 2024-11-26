@@ -38,14 +38,14 @@ class Produto {
     }
 }
 const produtos = [
-    new Produto(1, 'Short Xadrez e Croped Canelado Conjunto De Dormir Pijama Algodão Confortável Feminino', 'Camiseta de algodão branca', 20.00, 50.00, './img/1.png'),
-    new Produto(2, 'Short Xadrez e Croped Canelado Conjunto De Dormir Pijama Algodão Confortável Feminino', 'Camiseta de algodão preta', 20.00, 50.00, '/img/2.png'),
-    new Produto(3, 'Calça Jeans', 'Calça jeans azul', 40.00, 100.00, '/img/3.png'),
-    new Produto(4, 'Jaqueta', 'Jaqueta de couro sintético', 80.00, 200.00, '/img/4.png'),
-    new Produto(5, 'Vestido', 'Vestido de verão estampado', 35.00, 90.00, '/img/5.png'),
-    new Produto(6, 'Blusa de Moletom', 'Blusa de moletom cinza', 45.00, 110.00, '/img/6.png'),
-    new Produto(7, 'Saia', 'Saia de algodão', 25.00, 70.00, '/img/7.png'),
-    new Produto(8, 'Shorts', 'Shorts esportivo', 20.00, 60.00, '/img/8.png')
+    new Produto(1, 'Calça Xadrez e Blusa Conjunto De Dormir Pijama Suede Algodão Confortável Feminino Manga Curta', 'Conjunto confortável de algodão', 20.00, 50.00, './img/1.png'),
+    new Produto(2, 'Calça Xadrez e Blusa Conjunto De Dormir Pijama Algodão Confortável Unisex Feminino', 'Pijama unisex leve e macio', 20.00, 79.90, '/img/2.png'),
+    new Produto(3, 'Calça e Blusa Conjunto De Dormir Pijama Algodão Confortável Unisex Feminino', 'Conjunto clássico de algodão', 40.00, 79.90, '/img/3.png'),
+    new Produto(4, 'Calça Xadrez e Croped Canelado Conjunto De Dormir Pijama Algodão Confortável Feminino', 'Estilo e conforto em um conjunto', 80.00, 55.00, '/img/4.png'),
+    new Produto(5, 'Short Xadrez e Croped Canelado Conjunto De Dormir Pijama Algodão Confortável Feminino', 'Leve e ideal para noites quentes', 35.00, 49.00, '/img/5.png'),
+    new Produto(6, 'Calça Xadrez e Blusa Conjunto De Dormir Estampada Pijama Algodão Confortável Masculino', 'Conjunto masculino casual', 45.00, 79.90, '/img/6.png'),
+    new Produto(7, 'Calça Xadrez e Blusa Conjunto De Dormir Estampada Pijama Algodão Confortável Masculino', 'Pijama confortável e estiloso', 45.00, 79.90, '/img/7.png'),
+    new Produto(8, 'Calça Xadrez e Blusa Casal Conjunto De Dormir Pijama Algodão Confortável Unisex Feminino Masculino', 'Perfeito para casais relaxarem', 100.00, 154.00, '/img/8.png')
 ];
 
 // Criando as alocações para cada produto
